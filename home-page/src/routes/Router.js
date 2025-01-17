@@ -1,7 +1,8 @@
 import { lazy } from "react";
 import { Navigate } from "react-router-dom";
 
-const FullLayout = lazy(() => import("../layouts/FullLayout/FullLayout.js"));
+import FullLayout from '../layouts/FullLayout/FullLayout';
+
 const BasicTable = lazy(() => import("../views/tables/BasicTable.js"));
 
 // form elements
