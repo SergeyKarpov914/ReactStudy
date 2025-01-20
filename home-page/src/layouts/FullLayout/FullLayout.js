@@ -15,7 +15,7 @@ import backLogo  from "../../assets/images/backgrounds/skyline.jpg";
 
 const MainWrapper = experimentalStyled("div")(({ theme }) => ({
   display: "flex",
-  minHeight: "100vh",
+//  minHeight: "100vh",
   overflow: "hidden",
   width: "100%",
 }));
@@ -23,18 +23,18 @@ const PageWrapper = experimentalStyled("div")(({ theme }) => ({
   display: "flex",
   flex: "1 1 auto",
   overflow: "hidden",
+  marginTop: TopbarHeight,
 
   backgroundColor: theme.palette.background.default,
   [theme.breakpoints.up("lg")]: {
-    paddingTop: TopbarHeight,
+//    paddingTop: TopbarHeight,
   },
   [theme.breakpoints.down("lg")]: {
-    paddingTop: "64px",
+//    paddingTop: "64px",
   },
 }));
 
 const FullLayout = () => {
-  //
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
@@ -43,8 +43,13 @@ const FullLayout = () => {
       <Header
         sx={{
           paddingLeft: isSidebarOpen && lgUp ? "265px" : "",
-          height: "80px",
+          paddingBottom: '24px',
+          position: 'fixed',
+          top: 0,
+          height: "fit-content",
           backgroundImage: `url(${backLogo})`, 
+          backgroundColor: '#FFF',
+          backgroundRepeat: 'repeat-x',
         }}
         toggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
         toggleMobileSidebar={() => setMobileSidebarOpen(true)}
@@ -60,11 +65,11 @@ const FullLayout = () => {
         <Container
           maxWidth={false}
           sx={{
-            paddingTop: "20px",
-            paddingLeft: isSidebarOpen && lgUp ? "280px!important" : "",
+            marginTop: "20px",
+            marginLeft: isSidebarOpen && lgUp ? "280px!important" : "",
           }}
         >
-          <Box sx={{ minHeight: "calc(100vh - 170px)" }}>
+          <Box>
             <Outlet />
           </Box>
           <Footer />

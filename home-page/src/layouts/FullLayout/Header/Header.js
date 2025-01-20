@@ -27,7 +27,11 @@ const Header = (props) => {
   };
 
   return (
-    <AppBar sx={props.sx} elevation={0} className={props.customClass}>
+    <AppBar
+      sx={props.sx}
+      elevation={0}
+      className={props.customClass}
+    >
       <Toolbar style={myStyle}>
       </Toolbar>
     </AppBar>

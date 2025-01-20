@@ -70,9 +70,10 @@ const baseTheme = createTheme({
     MuiContainer: {
       styleOverrides: {
         root: {
-          paddingLeft: "15px !important",
-          paddingRight: "15px !important",
-          maxWidth: "1600px",
+          paddingLeft: '0 !important', //"15px !important",
+          paddingRight: '0 !important', //"15px !important",
+          position: 'relative',
+//          maxWidth: "1600px",
         },
       },
     },
@@ -126,10 +127,10 @@ const baseTheme = createTheme({
   },
   mixins: {
     toolbar: {
-      color: "#949db2",
+//      color: "#949db2",
       "@media(min-width:1280px)": {
         minHeight: TopbarHeight,
-        padding: "0 30px",
+//        padding: "0 30px",
       },
       "@media(max-width:1280px)": {
         minHeight: "64px",

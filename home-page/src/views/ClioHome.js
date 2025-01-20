@@ -5,7 +5,7 @@ const ClioHome = () => {
 
   const container = {
     display: "flex",
-    marginTop: "100px",
+//    marginTop: "100px",
   };
   const textContainer = {
     marginRight: "5px",

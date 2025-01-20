@@ -7,7 +7,12 @@ import {
   } from "@mui/material";
 const Footer = () => {
     return ( 
-        <Box sx={{p:3, textAlign:'center'}}>
+        <Box
+          sx={{
+            p:3,
+            textAlign: 'center'
+          }}
+        >
             <Typography>© 2025 All rights reserved by <Link href="">Clio Research Inc.</Link> </Typography>
         </Box>
      );
