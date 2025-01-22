@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import parse from 'html-react-parser';
 import {
   Box,
   Card,
@@ -19,25 +20,63 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit.<br/><br/><img src="/st
 
 const ARTICLES = [
   {
-    'date': '1/19/2025',
-    'path': 'Nine arts of software development.htm',
+    'path': 'Nine-arts-of-software-development.htm',
     'title': 'Nine Arts of Software Development',
   },
   {
-    'date': '1/18/2025',
-    'path': 'Nine arts of software development.htm',
+    'path': 'Nine-arts-of-software-development2.htm',
     'title': 'Nine Arts of Software Development Part deux',
   },
 ];
 
-const ArticleContent = ({text}) => {
+const articlesCache = {};
+
+async function fetchPage(path) {
+  try {
+    const response = await fetch(path);
+    if (!response.ok) {
+      return null;
+    }
+    const data = await response.text();
+    return data || null;
+  } catch (error) {
+    return null;
+  }
+} 
+
+const ArticleContent = (props) => {
+  const {
+    path,
+    loading,
+    setLoading,
+  } = props;
+
+  if (!path) return null;
+  let articleHtml = articlesCache[path];
+
+  if (!articleHtml) {
+    setLoading(true);
+    const fetchedPage = fetchPage(path);
+    if (fetchedPage) {
+      fetchedPage.then(text => {
+        articleHtml = text;
+        articlesCache[path] = articleHtml;
+        setLoading(false);
+      }).catch(err => console.log(err));
+    }
+  }
+
+  if (articleHtml) {
+    articleHtml = parse(articleHtml);
+  }
+
   return (
     <div>
       <div>
-        Here's some dummy content for {text}
+        {path}
       </div>
       <br />
-      <div dangerouslySetInnerHTML={{__html: DUMMY_HTML}} />
+      {articleHtml || null}
     </div>
   )
 }
@@ -45,10 +84,11 @@ const ArticleContent = ({text}) => {
 const ArticleCard = (props) => {
   const {
     articleData,
+    loading,
+    setLoading,
   } = props;
   if (!articleData) return null;
   const {
-    date,
     path,
     title,
   } = articleData;
@@ -72,7 +112,11 @@ const ArticleCard = (props) => {
           paddingRight: "2px !important",
         }}
       >
-        <ArticleContent text={title} />
+        <ArticleContent
+          path={path}
+          loading={loading}
+          setLoading={setLoading}
+        />
       </CardContent>
     </Card>
   );
@@ -82,6 +126,7 @@ const ArticlesList = (props) => {
   const {
     currentArticleIdx,
     setArticleIdx,
+    setLoading,
   } = props;
   return (
     <Card
@@ -105,10 +150,13 @@ const ArticlesList = (props) => {
         }}
       >
         <TableBody>
-          {ARTICLES.map(({date, path, title}, idx) => (
+          {ARTICLES.map(({path, title}, idx) => (
             <TableRow 
               selected={idx === currentArticleIdx}
-              onClick={() => setArticleIdx(idx)}
+              onClick={() => {
+                setArticleIdx(idx);
+                setLoading(true);
+              }}
               sx={{
                 cursor: 'pointer'
               }}
@@ -126,6 +174,7 @@ const ArticlesList = (props) => {
 
 const ClioArticles = () => {
   const [articleIdx, setArticleIdx] = useState(0);
+  const [loading, setLoading] = useState(false);
   const currentArticleData = ARTICLES[articleIdx];
 
   return (
@@ -142,9 +191,12 @@ const ClioArticles = () => {
       <ArticlesList
         currentArticleIdx={articleIdx}
         setArticleIdx={setArticleIdx}
+        setLoading={setLoading}
       />
       <ArticleCard
         articleData={currentArticleData}
+        loading={loading}
+        setLoading={setLoading}
       />
     </Box>
   );
